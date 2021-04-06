@@ -1,0 +1,39 @@
+void insertion_sort(int arr[], int n)
+{
+    int i, key, j;
+    for (i = 1; i < n; i++) 
+    {
+        key = arr[i];
+        j = i - 1;
+ 
+        while (j >= 0 && arr[j] > key) 
+        {
+            arr[j + 1] = arr[j];
+            j = j - 1;
+        }
+        arr[j + 1] = key;
+    }
+    print_array(arr, array_size);
+}
+ 
+void print_array(int arr[], int n)
+{
+    int i;
+    for (i = 0; i < n; i++)
+    {
+	print(arr[i]);
+    }
+    printf("\n");
+}
+ 
+int main()
+{
+    int arr[5];
+    int array_size = 5;
+    arr[0]= 12;
+    arr[1]= 11;
+    arr[2]= 13;
+    arr[3]= 5;
+    arr[4]= 6;    
+    insertion_sort(arr, array_size);
+}

@@ -1,0 +1,51 @@
+Function: insertion_sort
+Arguments: int arr[], int n
+Content:
+{
+    int i, key, j;
+    for (i = 1; i < n; i++) 
+    {
+	key = arr[i];
+	j = i - 1;
+	
+	while (j >= 0 && arr[j] > key) 
+	{
+	    arr[j + 1] = arr[j];
+	    j = j - 1;
+	}
+	arr[j + 1] = key;
+    }
+    print_array(arr, array_size);
+}
+Variables:
+Type, Name: int[], arr
+Type, Name: int n
+Type, Name: int, a
+Type, Name: int key
+Type, Name: int j
+Function calls: print_array
+Control Structures:
+For-loop:
+Initialization: i = 1
+Condition: i < n
+Iteration: i++
+Content: 
+{
+    key = arr[i];
+    j = i - 1;
+
+    while (j >= 0 && arr[j] > key) 
+    {
+        arr[j + 1] = arr[j];
+        j = j - 1;
+    }
+    arr[j + 1] = key;
+}
+While-loop:
+Condition: j >= 0 && arr[j] > key
+Content:
+{
+    arr[j + 1] = arr[j];
+    j = j - 1;
+}
+arr[j + 1] = key;
