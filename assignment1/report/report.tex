@@ -1,6 +1,8 @@
 \documentclass{article}
 
-\usepackage{amsmath}
+\usepackage{amsmath, amssymb}
+\usepackage{tikz}
+\usetikzlibrary{automata, arrows.meta, positioning}
 
 \title{1DV517 - Assignment 1}
 \author{Xiaoyue Chen}
@@ -21,6 +23,26 @@
 		      + (a+b+c)^* b (a+b+c)^* b \\
 		      + (a+b+c)^* c (a+b+c)^* c
 	      \end{align*}
+	\item DFA
+	      \begin{figure*}[h!]
+		      \centering
+		      \begin{tikzpicture}[auto]
+			      \node (q0) [state, initial, accepting] {$q_0$};
+			      \node (q1) [state, above right = of q0, accepting] {$q_1$};
+			      \node (q2) [state, below right = of q0, accepting] {$q_2$};
+			      \node (q3) [state, right = of q1, accepting] {$q_3$};
+
+			      \path [-stealth, thick]
+			      (q0) edge [loop above]
+			      node {$a$} ()
+			      (q0) edge node {$c$} (q1)
+			      (q0) edge node {$b$} (q2)
+			      (q1) edge [loop above] node {$a, c$} ()
+			      (q1) edge node {$b$} (q3)
+			      (q2) edge [loop above] node {$a, b$} ()
+			      ;
+		      \end{tikzpicture}
+	      \end{figure*}
 \end{itemize}
 
 \end{document}
