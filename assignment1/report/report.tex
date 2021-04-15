@@ -3,6 +3,7 @@
 \usepackage{amsmath, amssymb}
 \usepackage{tikz}
 \usetikzlibrary{automata, arrows.meta, positioning}
+\usepackage{float}
 
 \title{1DV517 - Assignment 1}
 \author{Xiaoyue Chen}
@@ -12,7 +13,7 @@
 \maketitle
 
 \section*{Exercise 1}
-\begin{itemize}
+\begin{enumerate}
 	\item \begin{align*}
 		      (b+c)^* ((b+c)^* a (b+c)^* a (b+c)^*)^* a (b+c)^* \\
 		      + (c^* b^* a c^* b^* a)^* c^* b^*
@@ -24,7 +25,7 @@
 		      + (a+b+c)^* c (a+b+c)^* c
 	      \end{align*}
 	\item DFA
-	      \begin{figure*}[h!]
+	      \begin{figure*}[h]
 		      \centering
 		      \begin{tikzpicture}[auto]
 			      \node (q0) [state, initial, accepting] {$q_0$};
