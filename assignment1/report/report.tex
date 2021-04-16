@@ -54,47 +54,189 @@ Since $L$ is regular, $L$ must have an
 equivalent NFA. For each transition in this NFA, we remove symbols that are not
 in $\Sigma'$. Now, any accepting string defined over
 $\Sigma$ is projected over $\Sigma'$ because all
-symbols that are not in $\Sigma'$ are removed. The resulting graph
-is also an NFA. Hence the new language $L'$ is regular.
+symbols that are not in $\Sigma'$ are removed. The resulting
+graph is also an NFA. Hence the new language $L'$ is
+regular.
 
 \section*{Exercise 3}
 \subsection*{I}
-We first show that the NFA accepts $a^+b^+$: we go from state 1
-to state 2 so we have 1 $a$. To accept more
-$a$s, we could loop in state 2. We then go from state 2 to
-state 3 to have 1 $b$, and loop in state 3 to have more
-$b$s. State 3 is an accepting state, hence the NFA accepts
-$a^+b^+$.
+Steps are shown in Figure \ref{fig:nfa1begin} to
+\begin{figure*}[h]
+	\caption{ Add an initial and a final state }
+	\label{fig:nfa1begin}
+	\begin{tikzpicture}[auto]
+		\node (0) [state, initial] {0};
+		\node (1) [state, right = of 0] {1};
+		\node (2) [state, right = of 1] {2};
+		\node (3) [state, above right = of 2] {3};
+		\node (4) [state, below right = of 3, accepting] {4};
+		\node (5) [state, below right = of 2] {5};
+		\node (6) [state, below right = of 1] {6};
 
-Next we show that the NFA accepts $a^+c^*$: we go from state 1 to
-state 6 to have 1 $a$, and loop in state 6 to have more
-$a$s. We take the $\epsilon$ transition to state
-5 if there is no $c$ in the string. If there is one or more
-$c$s, we take the $c$ transition to state
-5 and loop there. State 5 is an accepting state, hence the NFA accepts
-$a^+c^*$.
+		\path [-stealth, thick]
+		(0) edge node {$\epsilon$} (1)
+		(1) edge node {$a$} (2)
+		(1) edge [bend right] node {$a$} (6)
+		(2) edge [loop above] node {$a$} ()
+		(2) edge node {$b$} (3)
+		(3) edge [loop above] node {$b$} ()
+		(3) edge [bend right] node [above] {$\epsilon$} (1)
+		(3) edge node {$\epsilon$} (4)
+		(5) edge [loop below] node {$c$} ()
+		(5) edge [bend right] node {$a$} (6)
+		(5) edge [bend right] node {$a$} (2)
+		(5) edge node {$\epsilon$} (4)
+		(6) edge [loop below] node {$a$} ()
+		(6) edge [bend right] node {$c, \epsilon$} (5)
+		;
+	\end{tikzpicture}
+\end{figure*}
 
-We now show that if the previous substring is in $a^+b^+$, we
-could continue to accept either $a^+b^+$ or
-$a^+c^*$: if the previous substring is in $a^+b^+$,
-we would be on state 3. We could take the $\epsilon$ transition to
-state 1. Now, we could choose to go to either state 2 or state 6, which would
-accept $a^+b^+$ or $a^+c^*$ respectively.
+\begin{figure*}[h]
+	\caption{Remove state 3}
+	\begin{tikzpicture}[auto]
+		\node (0) [state, initial] {0};
+		\node (1) [state, right = of 0] {1};
+		\node (2) [state, right = of 1] {2};
+		\node (4) [state, below right = of 3, accepting] {4};
+		\node (5) [state, below right = of 2] {5};
+		\node (6) [state, below right = of 1] {6};
 
-Finally, we show that if the previous substring is $a^+c^*$, we
-could continue to accept either $a^+b^+$ or
-$a^+c^*$: we are on state 5. To accept $a^+b^+$, we
-could go to state 2; to accept $a^+c^*$, we could go to state 6.
+		\path [-stealth, thick]
+		(0) edge node {$\epsilon$} (1)
+		(1) edge [bend right] node {$a$} (2)
+		(1) edge [bend right] node {$a$} (6)
+		(2) edge [loop above] node {$a$} ()
+		(2) edge [bend right] node {$b^+$} (1)
+		(2) edge [bend left] node {$b^+$} (4)
+		(5) edge [loop below] node {$c$} ()
+		(5) edge [bend right] node {$a$} (6)
+		(5) edge [bend right] node {$a$} (2)
+		(5) edge node {$\epsilon$} (4)
+		(6) edge [loop below] node {$a$} ()
+		(6) edge [bend right] node {$c, \epsilon$} (5)
+		;
+	\end{tikzpicture}
+\end{figure*}
 
-Since the NFA accepts either $a^+b^+$ or $a^+c^*$,
-and could continue to accept either of them indefinitely, we conclude that the
-NFA accepts the language $L=(a^+b^+|a^+c^*)^+$.
+\begin{figure*}[h]
+	\caption{Remove state 2}
+	\begin{tikzpicture}[auto]
+		\node (0) [state, initial] {0};
+		\node (1) [state, right = of 0] {1};
+		\node (4) [state, below right = of 3, accepting] {4};
+		\node (5) [state, below right = of 2] {5};
+		\node (6) [state, below right = of 1] {6};
 
+		\path [-stealth, thick]
+		(0) edge node {$\epsilon$} (1)
+		(1) edge [loop above] node {$a^+b^+$} ()
+		(1) edge [bend right] node {$a$} (6)
+		(1) edge [bend left] node {$a^+b^+$} (4)
+		(5) edge [loop below] node {$c$} ()
+		(5) edge [bend right] node {$a^+b^+$} (1)
+		(5) edge [bend right] node {$a$} (6)
+		(5) edge node {$\epsilon|a^+b^+$} (4)
+		(6) edge [loop below] node {$a$} ()
+		(6) edge [bend right] node {$c, \epsilon$} (5)
+		;
+	\end{tikzpicture}
+\end{figure*}
+\begin{figure*}[h]
+	\caption{Remove state 6}
+	\begin{tikzpicture}[auto]
+		\node (0) [state, initial] {0};
+		\node (1) [state, right = of 0] {1};
+		\node (2) [state, right = of 1] {2};
+		\node (4) [state, below right = of 3, accepting] {4};
+		\node (5) [state, below right = of 2] {5};
+
+		\path [-stealth, thick]
+		(0) edge node {$\epsilon$} (1)
+		(1) edge [bend right] node {$a$} (2)
+		(1) edge [bend right] node {$a^+c|a^+$} (5)
+		(2) edge [loop above] node {$a$} ()
+		(2) edge [bend right] node {$b^+$} (1)
+		(2) edge node {$b^+$} (4)
+		(5) edge [loop below] node {$c|a^+c|a^+$} ()
+		(5) edge [bend right] node {$a$} (2)
+		(5) edge node {$\epsilon$} (4)
+		;
+	\end{tikzpicture}
+\end{figure*}
+
+\begin{figure*}[h]
+	\caption{Remove state 5}
+	\begin{tikzpicture}[auto]
+		\node (0) [state, initial] {0};
+		\node (1) [state, right = of 0] {1};
+		\node (2) [state, right = 2cm of 1] {2};
+		\node (4) [state, below right = of 3, accepting] {4};
+
+		\path [-stealth, thick]
+		(0) edge node {$\epsilon$} (1)
+		(1) edge [bend right] node {$(a^+c^*)^+$} (2)
+		(1) edge [bend right] node [below] {$(a^+c^*)^+$} (4)
+		(2) edge [loop above] node {$a$} ()
+		(2) edge [bend right] node {$b^+$} (1)
+		(2) edge node {$b^+$} (4)
+		;
+	\end{tikzpicture}
+\end{figure*}
+
+\begin{figure*}[h]
+	\caption{Remove state 1}
+	\begin{tikzpicture}[auto]
+		\node (0) [state, initial] {0};
+		\node (2) [state, right = 2cm of 1] {2};
+		\node (4) [state, below right = of 3, accepting] {4};
+
+		\path [-stealth, thick]
+		(0) edge node {$(a^+c^*)^+$} (2)
+		(0) edge [bend right] node {$(a^+c^*)^+$}(4)
+		(2) edge [loop above] node {$a|b^+(a^+c^*)^+$} ()
+		(2) edge node {$b^+$} (4)
+		;
+	\end{tikzpicture}
+\end{figure*}
+% We first show that the NFA accepts $a^+b^+$: we go from state 1
+% to state 2 so we have 1 $a$. To accept more
+% $a$s, we could loop in state 2. We then go from state 2 to
+% state 3 to have 1 $b$, and loop in state 3 to have more
+% $b$s. State 3 is an accepting state, hence the NFA accepts
+% $a^+b^+$.
+% 
+% Next we show that the NFA accepts $a^+c^*$: we go from state 1 to
+% state 6 to have 1 $a$, and loop in state 6 to have more
+% $a$s. We take the $\epsilon$ transition to state
+% 5 if there is no $c$ in the string. If there is one or more
+% $c$s, we take the $c$ transition to state
+% 5 and loop there. State 5 is an accepting state, hence the NFA accepts
+% $a^+c^*$.
+% 
+% We now show that if the previous substring is in $a^+b^+$, we
+% could continue to accept either $a^+b^+$ or
+% $a^+c^*$: if the previous substring is in $a^+b^+$,
+% we would be on state 3. We could take the $\epsilon$ transition to
+% state 1. Now, we could choose to go to either state 2 or state 6, which would
+% accept $a^+b^+$ or $a^+c^*$ respectively.
+% 
+% Finally, we show that if the previous substring is $a^+c^*$, we
+% could continue to accept either $a^+b^+$ or
+% $a^+c^*$: we are on state 5. To accept $a^+b^+$, we
+% could go to state 2; to accept $a^+c^*$, we could go to state 6.
+% 
+% Since the NFA accepts either $a^+b^+$ or $a^+c^*$,
+% and could continue to accept either of them indefinitely, we conclude that the
+% NFA accepts the language $L=(a^+b^+|a^+c^*)^+$.
+% 
 \subsection*{II}
-The language is $L=(ab^*a|b^+ab|b^+aab^*a)^*(ab^*|b^+a|b^+aab^*)$. Steps are shown below:
+The language is $L=(ab^*a|b^+ab|b^+aab^*a)^*(ab^*|b^+a|b^+aab^*)$. Steps are shown in Figure
+\ref{fig:nfastart} to \ref{fig:nfaend}.
 
-\begin{figure*}[ht]
-	\caption*{Add a start and a final state}
+\begin{figure}[ht]
+	\caption{Add a start and a final state}
+	\label{fig:nfastart}
 	\begin{tikzpicture}[auto]
 		\node (0) [state, initial] {0};
 		\node (1) [state, right = of 0] {1};
@@ -117,10 +259,10 @@ The language is $L=(ab^*a|b^+ab|b^+aab^*a)^*(ab^*|b^+a|b^+aab^*)$. Steps are sho
 		(4) edge node {$a$} (3)
 		;
 	\end{tikzpicture}
-\end{figure*}
+\end{figure}
 
 \begin{figure*}[ht]
-	\caption*{Remove state 4}
+	\caption{Remove state 4}
 	\begin{tikzpicture}[auto]
 		\node (0) [state, initial] {0};
 		\node (1) [state, right = of 0] {1};
@@ -143,7 +285,7 @@ The language is $L=(ab^*a|b^+ab|b^+aab^*a)^*(ab^*|b^+a|b^+aab^*)$. Steps are sho
 \end{figure*}
 
 \begin{figure*}[ht]
-	\caption*{Remove state 2}
+	\caption{Remove state 2}
 	\begin{tikzpicture}[auto]
 		\node (0) [state, initial] {0};
 		\node (1) [state, right = of 0] {1};
@@ -162,7 +304,7 @@ The language is $L=(ab^*a|b^+ab|b^+aab^*a)^*(ab^*|b^+a|b^+aab^*)$. Steps are sho
 \end{figure*}
 
 \begin{figure*}[ht]
-	\caption*{Remove state 3}
+	\caption{Remove state 3}
 	\begin{tikzpicture}[auto]
 		\node (0) [state, initial] {0};
 		\node (1) [state, right = of 0] {1};
@@ -176,8 +318,9 @@ The language is $L=(ab^*a|b^+ab|b^+aab^*a)^*(ab^*|b^+a|b^+aab^*)$. Steps are sho
 	\end{tikzpicture}
 \end{figure*}
 
-\begin{figure*}[ht]
-	\caption*{Remove state 1}
+\begin{figure}[ht]
+	\caption{Remove state 1}
+	\label{fig:nfaend}
 	\begin{tikzpicture}[auto]
 		\node (0) [state, initial] {0};
 		\node (5) [state, right = of 3, accepting] {5};
@@ -186,6 +329,20 @@ The language is $L=(ab^*a|b^+ab|b^+aab^*a)^*(ab^*|b^+a|b^+aab^*)$. Steps are sho
 		(0) edge node {$(ab^*a|b^+ab|b^+aab^*a)^*(ab^*|b^+a|b^+aab^*)$} (5)
 		;
 	\end{tikzpicture}
-\end{figure*}
+\end{figure}
+
+\section*{Exercise 4}
+\subsection*{1}
+The language is regular. Proof:
+
+Since $t,w \in \Sigma^*$, regular expression $(a|b|c)^*$ could
+accept any $t,w$. Hence any string in the form
+$wtw$ could be accepted by regular expression
+$(a|b|c)^*(a|b|c)^*(a|b|c)^*$, which is equivalent to $(a|b|c)^*$.
+Therefore, the language is regular.
+
+\subsection*{2}
+The language is regular. The regular expression $((a|b)(a|b))^*(a|b)((c|a^*)(c|a^*))^*$ could match all strings of the given form. Hence the language is regular.
+
 
 \end{document}
