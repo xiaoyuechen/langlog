@@ -1,0 +1,17 @@
+<Person Name="Harry">
+  <Year today="23-05">2021</Year>
+  <Employment>
+    <Position> Doctoral Candidate </Position>
+    <Year started="10">2017</Year>
+  </Employment>
+  <YearsEmployed> !- Year </YearsEmployed>
+</Person>
+
+
+<ShoppingList numItems="4">
+  <item name="beer">140</item>
+  <item name="coffee">70</item>
+  <item name="steak">80</item>
+  <item name="cola">35</item>
+  <sum> !+ item </sum>
+</ShoppingList>
