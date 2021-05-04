@@ -13,6 +13,26 @@
 
 \maketitle
 
+\begin{table}[H]
+	\centering
+	\begin{tabular}{c|c}
+		\hline
+		Exercise & Points \\
+		\hline
+		1        & 15/15  \\
+		2        & 7/15   \\
+		3        & 20/20  \\
+		4        & 10/20  \\
+		5        & 30/30  \\
+		\hline
+		Total    & 82/100
+	\end{tabular}
+\end{table}
+
+Above are the results from the first hand-in. I will only change the ones that
+does not receive full points (exercise 2 and 4.1) and mark them out by
+``$====>>>>$ changed''.
+
 \section*{Exercise 1}
 \begin{enumerate}
 	\item \begin{align*}
@@ -26,7 +46,7 @@
 		      + (a+b+c)^* c (a+b+c)^* c
 	      \end{align*}
 	\item DFA
-	      \begin{figure*}[h]
+	      \begin{figure}[H]
 		      \centering
 		      \begin{tikzpicture}[auto]
 			      \node (q0) [state, initial, accepting] {$q_0$};
@@ -44,18 +64,35 @@
 			      (q2) edge [loop above] node {$a, b$} ()
 			      ;
 		      \end{tikzpicture}
-	      \end{figure*}
+	      \end{figure}
 \end{enumerate}
 
-\section*{Exercise 2}
+\section*{Exercise 2 $====>>>>$ changed}
 $L'$ is regular. Proof:
 
 Since $L$ is regular, $L$ must have an
-equivalent NFA. For each transition in this NFA, we remove symbols that are not
-in $\Sigma'$. Now, any accepting string defined over
-$\Sigma$ is projected over $\Sigma'$ because all
-symbols that are not in $\Sigma'$ are removed. The resulting graph
-is also an NFA. Hence the new language $L'$ is regular.
+equivalent NFA. We denote this NFA as $A$. For each
+transition in $A$, we remove symbols that are not
+in $\Sigma'$. The resulting automaton would be an
+$\epsilon$-NFA where transitions with symbols in
+$\Sigma \setminus \Sigma'$ are replaced with
+$\epsilon$-transitions. We denote this $\epsilon$-NFA
+as $A'$.
+
+We now prove that $A'$ is an automaton for
+$L'$: for every string $s$ defined over
+$\Sigma$, there exist a path in $A$ that
+accepts $s$. We could find the corresponding path in
+$A'$ where the transitions with symbols in
+$\Sigma \setminus \Sigma'$ are replaced with $\epsilon$-transitions.
+This path accepts the projection of $s$ over
+$\Sigma'$ because the path is the same, except that symbols in
+$\Sigma \setminus \Sigma'$ are replaced with $\epsilon$. Hence
+$A'$ could accept projections of any string defined over
+$\Sigma$. It is a finite automaton for $L'$.
+
+If a language could be expressed in a finite automaton, then it is regular.
+Hence $L'$ is regular.
 
 \section*{Exercise 3}
 \subsection*{I}
@@ -71,11 +108,14 @@ state 3 to have 1 $b$, and loop in state 3 to have more
 $b$s. State 3 is an accepting state, hence the NFA accepts
 $a^+b^+$.
 
-Next we show that the NFA accepts $a^+c^*$: we go from state 1 to
+Next we show that the NFA accepts $a^+c^*$: we go from state 1
+to
 state 6 to have 1 $a$, and loop in state 6 to have more
-$a$s. We take the $\epsilon$ transition to state
+$a$s. We take the $\epsilon$ transition to
+state
 5 if there is no $c$ in the string. If there is one or more
-$c$s, we take the $c$ transition to state
+$c$s, we take the $c$ transition to
+state
 5 and loop there. State 5 is an accepting state, hence the NFA accepts
 $a^+c^*$.
 
@@ -98,7 +138,7 @@ $a^+c^*$, and could continue to accept either of them
 indefinitely, we conclude that the NFA accepts the language
 $L=(a^+b^+|a^+c^*)^+$.
 
-\begin{figure*}[h]
+\begin{figure}[H]
 	\caption{ Add an initial and a final state }
 	\label{fig:nfa1begin}
 	\begin{tikzpicture}[auto]
@@ -127,9 +167,9 @@ $L=(a^+b^+|a^+c^*)^+$.
 		(6) edge [bend right] node {$c, \epsilon$} (5)
 		;
 	\end{tikzpicture}
-\end{figure*}
+\end{figure}
 
-\begin{figure*}[h]
+\begin{figure}[H]
 	\caption{Remove state 3}
 	\begin{tikzpicture}[auto]
 		\node (0) [state, initial] {0};
@@ -154,9 +194,9 @@ $L=(a^+b^+|a^+c^*)^+$.
 		(6) edge [bend right] node {$c, \epsilon$} (5)
 		;
 	\end{tikzpicture}
-\end{figure*}
+\end{figure}
 
-\begin{figure*}[h]
+\begin{figure}[H]
 	\caption{Remove state 2}
 	\label{fig:nfa1end}
 	\begin{tikzpicture}[auto]
@@ -179,13 +219,13 @@ $L=(a^+b^+|a^+c^*)^+$.
 		(6) edge [bend right] node {$c, \epsilon$} (5)
 		;
 	\end{tikzpicture}
-\end{figure*}
+\end{figure}
 
 \subsection*{II}
 The language is $L=(ab^*a|b^+ab|b^+aab^*a)^*(ab^*|b^+a|b^+aab^*)$. Steps are shown in Figure
 \ref{fig:nfastart} to \ref{fig:nfaend}.
 
-\begin{figure}[ht]
+\begin{figure}[H]
 	\caption{Add a start and a final state}
 	\label{fig:nfastart}
 	\begin{tikzpicture}[auto]
@@ -212,7 +252,7 @@ The language is $L=(ab^*a|b^+ab|b^+aab^*a)^*(ab^*|b^+a|b^+aab^*)$. Steps are sho
 	\end{tikzpicture}
 \end{figure}
 
-\begin{figure*}[ht]
+\begin{figure}[H]
 	\caption{Remove state 4}
 	\begin{tikzpicture}[auto]
 		\node (0) [state, initial] {0};
@@ -233,9 +273,9 @@ The language is $L=(ab^*a|b^+ab|b^+aab^*a)^*(ab^*|b^+a|b^+aab^*)$. Steps are sho
 		(3) edge node {$\epsilon$} (5)
 		;
 	\end{tikzpicture}
-\end{figure*}
+\end{figure}
 
-\begin{figure*}[ht]
+\begin{figure}[H]
 	\caption{Remove state 2}
 	\begin{tikzpicture}[auto]
 		\node (0) [state, initial] {0};
@@ -252,9 +292,9 @@ The language is $L=(ab^*a|b^+ab|b^+aab^*a)^*(ab^*|b^+a|b^+aab^*)$. Steps are sho
 		(3) edge node {$\epsilon|ab^*$} (5)
 		;
 	\end{tikzpicture}
-\end{figure*}
+\end{figure}
 
-\begin{figure*}[ht]
+\begin{figure}[H]
 	\caption{Remove state 3}
 	\begin{tikzpicture}[auto]
 		\node (0) [state, initial] {0};
@@ -267,9 +307,9 @@ The language is $L=(ab^*a|b^+ab|b^+aab^*a)^*(ab^*|b^+a|b^+aab^*)$. Steps are sho
 		(1) edge node {$ab^*|b^+a|b^+aab^*$} (5)
 		;
 	\end{tikzpicture}
-\end{figure*}
+\end{figure}
 
-\begin{figure}[ht]
+\begin{figure}[H]
 	\caption{Remove state 1}
 	\label{fig:nfaend}
 	\begin{tikzpicture}[auto]
@@ -283,14 +323,30 @@ The language is $L=(ab^*a|b^+ab|b^+aab^*a)^*(ab^*|b^+a|b^+aab^*)$. Steps are sho
 \end{figure}
 
 \section*{Exercise 4}
-\subsection*{1}
-The language is regular. Proof:
+\subsection*{1 $====>>>>$ changed}
+The language is irregular. Proof:
 
-Since $t,w \in \Sigma^*$, regular expression $(a|b|c)^*$ could
-accept any $t,w$. Hence any string in the form
-$wtw$ could be accepted by regular expression
-$(a|b|c)^*(a|b|c)^*(a|b|c)^*$, which is equivalent to $(a|b|c)^*$.
-Therefore, the language is regular.
+Let $x=wtw$ be a string in the language. Denote
+$|w|=n$. Then $|x| = 2|w| + |t| \geq 2n \geq n$.
+
+If the Pumping Lemma holds: $x = pvq$ where
+$|pv| \leq n \land |v| \geq 1$.
+
+Let $w_i$ denote the $i$:th symbol of
+$w$. Then $p = w_1 w_2 \cdots w_j$, $v = w_{j+1} w_{j+2} \cdots w_k$
+and $q = w_{k+1} w_{k+2} \cdots w_n
+	t w$ where $ 1 \leq j \leq k-1$ and
+$k \leq n$.
+
+For C4 of the Pumping Lemma to hold, $w_1 \cdots w_j (w_{j+1} \cdots w_k)^i
+	w_{k+1} \cdots w_n t w$ should belong to
+the language. However, it does not hold. For example, $x = aacaa$
+satisfies the conditions above ($w=aa, ~t=c, ~p=a, ~v=a, ~q=caa$), but
+$aaacaa~(i=2)$ does not belong to
+the language.
+
+The pumping lemma does not hold for the language. Hence the language is
+irregular.
 
 \subsection*{2}
 The language is regular. The regular expression $((a|b)(a|b))^*(a|b)((c|a^*)(c|a^*))^*$ could
