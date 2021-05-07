@@ -2,18 +2,18 @@ grammar xml;
 
 s : element s | ;
 
-element : TAG_START content TAG_END ;
+element : tagstart content tagend ;
 
-content : element content* | POD content* ;
+content : element content? | pod content? ;
 
-TAG_START : '<' STR ATTRIB* '>' ;
-TAG_END : '</' STR '>' ;
+tagstart : '<' STR WS* attrib* '>' ;
+tagend : '</' STR '>' ;
 
-ATTRIB : STR '=' '"' POD '"' ;
+attrib : STR '=' '"' pod '"' ;
 
-POD : NUM | STR | MACRO ;
+pod : NUM | STR | macro ;
 
-MACRO : '!' SIGN STR ;
+macro : '!' SIGN WS* STR ;
 
 STR : CHAR (CHAR|DIGIT)* ;
 fragment CHAR : [a-zA-Z] ;
@@ -24,6 +24,4 @@ fragment DIGIT : [0-9] ;
 
 SIGN : '+' | '-' ;
 
-WS : [ \t]+ -> skip ;
-
-NL:'\r'? '\n' -> skip ;
+WS : [ \r\t\n]+ -> skip ;
