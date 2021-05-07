@@ -1,6 +1,6 @@
 grammar xml;
 
-s : element s | ;
+s : element s |  ;
 
 element : tagstart content tagend ;
 
