@@ -180,7 +180,7 @@ After removing left-recursion
 	B  & \rightarrow bBSa ~|~ Sa
 \end{align*}
 
-Removing $S$ in $B \rightarrow Sa$
+Remove $S$ in $B \rightarrow Sa$
 \begin{align*}
 	S  & \rightarrow aS' ~|~ bBScS' ~|~ S'             \\
 	S' & \rightarrow cS' ~|~ \epsilon                  \\
@@ -193,6 +193,23 @@ Left-factorize $bBS$ in the rules for $B$
 	S' & \rightarrow cS' ~|~ \epsilon       \\
 	B  & \rightarrow bBSB' ~|~ aS'a ~|~ S'a \\
 	B' & \rightarrow a ~|~ cS'a
+\end{align*}
+
+Remove $S'$ in $B \rightarrow S'a$
+\begin{align*}
+	S  & \rightarrow aS' ~|~ bBScS' ~|~ S'         \\
+	S' & \rightarrow cS' ~|~ \epsilon              \\
+	B  & \rightarrow bBSB' ~|~ aS'a ~|~ a ~|~ cS'a \\
+	B' & \rightarrow a ~|~ cS'a
+\end{align*}
+
+Left-factorize $a$ in the rules for $B$
+\begin{align*}
+	S   & \rightarrow aS' ~|~ bBScS' ~|~ S'  \\
+	S'  & \rightarrow cS' ~|~ \epsilon       \\
+	B   & \rightarrow bBSB' ~|~ aB'' ~|~ cS'a \\
+	B'  & \rightarrow a ~|~ cS'a             \\
+	B'' & \rightarrow S'a ~|~ \epsilon
 \end{align*}
 
 Above is the final unambiguous grammar.
