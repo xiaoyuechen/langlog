@@ -205,13 +205,112 @@ Remove $S'$ in $B \rightarrow S'a$
 
 Left-factorize $a$ in the rules for $B$
 \begin{align*}
-	S   & \rightarrow aS' ~|~ bBScS' ~|~ S'  \\
-	S'  & \rightarrow cS' ~|~ \epsilon       \\
+	S   & \rightarrow aS' ~|~ bBScS' ~|~ S'   \\
+	S'  & \rightarrow cS' ~|~ \epsilon        \\
 	B   & \rightarrow bBSB' ~|~ aB'' ~|~ cS'a \\
-	B'  & \rightarrow a ~|~ cS'a             \\
+	B'  & \rightarrow a ~|~ cS'a              \\
 	B'' & \rightarrow S'a ~|~ \epsilon
 \end{align*}
 
 Above is the final unambiguous grammar.
+
+\section{}
+\subsection{}
+CFG for XML
+\begin{align*}
+	                    & G                    = \langle V, \Sigma, R, S \rangle               \\
+	                    & \Sigma               = \{ \text{all \textbf{bold} symbols} \}        \\
+	                    & V                    = \{ \text{all \textit{italics} variables} \}   \\
+	                    & R                    = \{                                            \\
+	\\
+	S                   & \rightarrow \mathit{Element} ~ S ~|~ \epsilon                        \\
+	\\
+	\mathit{Element}    & \rightarrow \mathit{TagStart} ~ \mathit{Content} ~ \mathit{TagEnd}   \\
+	\mathit{Content}    & \rightarrow \mathit{Element} ~ \mathit{Content} ~|~
+	\mathit{POD} ~ \mathit{Content} ~|~ \mathit{Element} ~|~ \mathit{POD}                      \\
+	\\
+	\mathit{TagStart}   & \rightarrow \boldsymbol{<} ~
+	\mathit{String} ~ \mathit{OptAttribs} ~ \boldsymbol{>}                                     \\
+	\mathit{OptAttribs} & \rightarrow \mathit{Attrib} ~ \mathit{OptAttribs} ~|~ \epsilon       \\
+	\mathit{TagEnd}     & \rightarrow \boldsymbol{</} ~
+	\mathit{String} ~ \boldsymbol{>}                                                           \\
+	\\
+	\mathit{Attrib}     & \rightarrow \mathit{String} ~ \boldsymbol{=} ~
+	\boldsymbol{''} ~ \mathit{POD} ~ \boldsymbol{''}                                           \\
+	\\
+	\mathit{POD}        & \rightarrow \mathit{Num} ~|~ \mathit{String} ~|~ \mathit{Macro}      \\
+	\\
+	\mathit{Macro}      & \rightarrow \boldsymbol{!} ~ \mathit{Sign} ~ \mathit{String}         \\
+	\\
+	\mathit{String}     & \rightarrow \mathit{Char} ~ \mathit{String}'                         \\
+	\mathit{String}'    & \rightarrow \mathit{Char} ~ \mathit{String}' ~|~
+	\mathit{Digit} ~ \mathit{String}' ~|~ \epsilon                                             \\
+	\mathit{Char}       & \rightarrow \mathbf{a} ~|~ \cdots ~|~ \mathbf{z} ~|~
+	\mathbf{A} ~|~ \cdots ~|~ \mathbf{Z}                                                       \\
+	\\
+	\mathit{Num}        & \rightarrow \mathit{OptSign} ~ \mathit{Digits} ~ \mathit{OptDecimal} \\
+	\mathit{Digits}     & \rightarrow \mathit{Digit} ~ \mathit{Digits} ~|~ \mathit{Digit}      \\
+	\mathit{Digit}      & \rightarrow \mathbf{0} ~|~ \mathbf{1} ~|~ \cdots ~|~ \mathbf{9}      \\
+	\mathit{OptSign}    & \rightarrow \mathit{Sign} ~|~ \epsilon                               \\
+	\mathit{Sign}       & \rightarrow \boldsymbol{+} ~|~ \boldsymbol{-}                        \\
+	\mathit{OptDecimal} & \rightarrow \boldsymbol{.} ~ \mathit{Digits} ~|~ \epsilon            \\
+	\\
+	\}
+\end{align*}
+
+CFG for JSON
+\begin{align*}
+	                    & G                    = \langle V, \Sigma, R, S \rangle               \\
+	                    & \Sigma               = \{ \text{all \textbf{bold} symbols} \}        \\
+	                    & V                    = \{ \text{all \textit{italics} variables} \}   \\
+	                    & R                    = \{                                            \\
+	\\
+	S                   & \rightarrow \mathit{Object} ~ S ~|~ \epsilon                         \\
+	\\
+	\mathit{Object}     & \rightarrow \mathit{Key} ~ \boldsymbol{:} ~ \boldsymbol{\{} ~
+	\mathit{Content} ~ \boldsymbol{\}}                                                         \\
+	\mathit{Content}    & \rightarrow \mathit{Object} ~ \boldsymbol{,} ~ \mathit{Content} ~|~
+	\mathit{KeyValue} ~ \boldsymbol{,} ~ \mathit{Content} ~|~
+	\mathit{Object} ~|~ \mathit{KeyValue}                                                      \\
+	\mathit{KeyValue}   & \rightarrow \textit{Key} ~ \boldsymbol{:} ~ \textit{Value}           \\
+	\\
+	\mathit{Value}      & \rightarrow \mathit{POD}                                             \\
+	\\
+	\mathit{Key}        & \rightarrow \boldsymbol{''} ~ \mathit{String} ~ \boldsymbol{''}      \\
+	\\
+	\mathit{POD}        & \rightarrow \mathit{Num} ~|~ \mathit{String}                         \\
+	\\
+	\mathit{String}     & \rightarrow \mathit{Char} ~ \mathit{String}'                         \\
+	\mathit{String}'    & \rightarrow \mathit{Char} ~ \mathit{String}' ~|~
+	\mathit{Digit} ~ \mathit{String}' ~|~ \epsilon                                             \\
+	\mathit{Char}       & \rightarrow \mathbf{a} ~|~ \cdots ~|~ \mathbf{z} ~|~
+	\mathbf{A} ~|~ \cdots ~|~ \mathbf{Z}                                                       \\
+	\\
+	\mathit{Num}        & \rightarrow \mathit{OptSign} ~ \mathit{Digits} ~ \mathit{OptDecimal} \\
+	\mathit{Digits}     & \rightarrow \mathit{Digit} ~ \mathit{Digits} ~|~ \mathit{Digit}      \\
+	\mathit{Digit}      & \rightarrow \mathbf{0} ~|~ \mathbf{1} ~|~ \cdots ~|~ \mathbf{9}      \\
+	\mathit{OptSign}    & \rightarrow \mathit{Sign} ~|~ \epsilon                               \\
+	\mathit{Sign}       & \rightarrow \boldsymbol{+} ~|~ \boldsymbol{-}                        \\
+	\mathit{OptDecimal} & \rightarrow \boldsymbol{.} ~ \mathit{Digits} ~|~ \epsilon            \\
+	\\
+	\}
+\end{align*}
+
+\subsection{}
+Each \textit{Element} in XML corresponds to an \textit{Object}
+in JSON. The first string in the starting tag of XML corresponds to the
+\textit{Key} of the \textit{Object} in JSON. The
+\textit{Attrib} in XML corresponds to \textit{KeyValue} in JSON,
+where the name of the \textit{Attrib} is the \textit{Key}
+and \textit{POD} is the \textit{Value}.
+\textit{String} and \textit{Num} are the same.
+\textit{POD} needs to be evaluated to a \textit{Value}.
+
+To evaluate macros, we keep a hash-table of lists of child elements' PODs who
+has the same tag names. The key of the table is the tag name and the value is a
+list of PODs. We append the child element's POD to the list which corresponds
+to its name whenever we encounter an element.  When we encounter a macro, we
+use the string at the end of the macro to look up
+the list in the hash-table, and evaluate using the specified operator.
 
 \end{document}
