@@ -1,0 +1,22 @@
+"Person":
+{
+  "Name" : "Harry",
+  "Year" : { "today" : 2305, "POD" : 2021 },
+  "Employment" :
+  {
+    "Position" : "DoctoralCandidate",
+    "Year" : { "started" : 10, "POD" : 2017 },
+  },
+  "YearsEmployed" : 4 
+}
+  
+"ShoppingList":
+{
+  "NumItems": 4,
+  "item" : { "name" : "beer", "POD" : 140 },
+  "item" : { "name" : "coffee", "POD" : 70 },
+  "item" : { "name" : "steak", "POD" : 80 },
+  "item" : { "name" : "cola" ,  "POD" : 35 }, 
+  "sum" : 225,
+}
+  
