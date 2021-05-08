@@ -313,4 +313,14 @@ to its name whenever we encounter an element.  When we encounter a macro, we
 use the string at the end of the macro to look up
 the list in the hash-table, and evaluate using the specified operator.
 
+\subsection{}
+You need to download all the files in order to run the translator
+\lstinline{translator.py}. Example usage:
+
+\lstinline{python3 translator.py input.xml}
+
+The translator outputs to the standard output. Note that I changed to input
+file. "23-05" become "2305" and "Doctoral Candidate" become
+"DoctoralCandidate".
+
 \end{document}
