@@ -5,4 +5,5 @@
 *.toc
 *.log
 *.gz
+__pycache__
 report.pdf
