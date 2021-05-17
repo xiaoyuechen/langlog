@@ -1,0 +1,117 @@
+\documentclass[a4paper]{article}
+
+\usepackage{amsmath, amssymb}
+\usepackage{logicproof}
+
+\author{Xiaoyue Chen}
+\title{1DV517\\Assignment 3 report}
+
+\begin{document}
+\maketitle
+
+\section{}
+\subsection{}
+Denote A is red as $a$, then A is blue is
+$\neg a$, and A is not blue is $\neg \neg a$ which is
+$a$. Similarly, denote B, C, D, E is red as
+$b,c,d,e$ respectively. We have
+
+\begin{itemize}
+	\item $\lnot c \lor b$
+	\item $(d \lor e) \land (\lnot d \lor \lnot e)$
+	\item $a \rightarrow d$
+	\item $e \equiv c$
+	\item $b \rightarrow (a \land c)$
+\end{itemize}
+
+\subsection{}
+\begin{logicproof}{2}
+	\lnot c \lor b & premise \\
+	(d \lor e) \land (\lnot d \lor \lnot e) & premise \\
+	a \rightarrow d & premise \\
+	e \equiv c & premise \\
+	b \rightarrow (a \land c) & premise \\
+	\begin{subproof}
+		c & assumption \\
+		b & disjunctive syllogism 1,6 \\
+		a \land c & $\rightarrow$e 5,7 \\
+		a & $\land$e 8 \\
+		d & $\rightarrow$e 3,18 \\
+		e & $\equiv$e 4,6 \\
+		\lnot d \lor \lnot e & $\land$e 2 \\
+		\lnot e & disjunctive syllogism 10,12 \\
+		\bot & $\lnot$e 11,13
+	\end{subproof}
+	\lnot c & $\lnot$i 6--14 \\
+	\lnot e & $\equiv$e 4,15 \\
+	d \lor e & $\land$e 2 \\
+	d & disjunctive syllogism 16,17 \\
+	\begin{subproof}
+		a \land c & assumption \\
+		c & $\land$e 19 \\
+		\bot & $\lnot$e 15,20
+	\end{subproof}
+	\lnot (a \land c) & $\lnot$i 19--21 \\
+	\lnot b & MT 5,22 \\
+	(\lnot b \land \lnot c \land d \land \lnot e) & $\land$i
+	15,16,18,23
+\end{logicproof}
+Hence the possible colors of each box are
+\begin{itemize}
+	\item A: red or blue
+	\item B: blue
+	\item C: blue
+	\item D: red
+	\item E: blue
+\end{itemize}
+
+\section{}
+\subsection{}
+Predicates
+\begin{itemize}
+	\item $P(x)$: $x$ is a program
+	\item $M(x,y)$: $y$ is a method of
+	      $x$
+	\item $I(x,y)$: $x$ can invoke
+	      $y$
+	\item $E(x,y)$: $y$ is an entry point of
+	      $x$
+	\item $U(x)$: $x$ is a user
+	\item $S(x,y)$: $y$ is a sink of
+	      $x$
+	\item $A(x,y)$: $y$ is accessible from
+	      $x$
+\end{itemize}
+
+\subsection{}
+\begin{itemize}
+	\item
+	      We define a program as a collection of methods invoking each other.
+	      \begin{equation}
+		      \label{eq:program}
+		      \forall p.(P(p) \equiv \exists m_1,m_2.(M(x,m_1) \land M(x,m_2)
+		      \land I(m_1, m_2)))
+	      \end{equation}
+	\item
+	      An entry point is a method called by the user to run the program. An entry
+	      point cannot be invoked by other methods.
+	      \begin{equation}
+		      \label{eq:entry}
+		      \forall e.(E(e) \rightarrow (M(e) \land \exists u.(U(u) \land
+		      I(u,e)) \land \forall m.(m \neq e \rightarrow \lnot I(m,e))))
+	      \end{equation}
+	\item
+	      Each program has exactly one entry point.
+	      \begin{equation}
+		      \forall p.(P(p) \rightarrow \exists e.(H(p,e) \land E(e)
+		      \land \forall e'.(H(p,e') \land E(e') \rightarrow e=e'))
+	      \end{equation}
+	\item
+	      A program should have some sinks that are accessible from the entry point.
+	      \begin{equation}
+		      \forall p.(P(p) \rightarrow \exists s.(S(s) \land H(p,s)
+		      \land \exists e.(E(e) \land H(p,e) \land A(e,s))))
+	      \end{equation}
+\end{itemize}
+
+\end{document}
