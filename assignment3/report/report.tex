@@ -34,16 +34,16 @@ $b,c,d,e$ respectively. We have
 	\begin{subproof}
 		c & assumption \\
 		b & disjunctive syllogism 1,6 \\
-		a \land c & $\rightarrow$e 5,7 \\
+		a \land c & MP 5,7 \\
 		a & $\land$e 8 \\
-		d & $\rightarrow$e 3,18 \\
-		e & $\equiv$e 4,6 \\
+		d & MP 3,18 \\
+		e & equivalent 4,6 \\
 		\lnot d \lor \lnot e & $\land$e 2 \\
 		\lnot e & disjunctive syllogism 10,12 \\
 		\bot & $\lnot$e 11,13
 	\end{subproof}
 	\lnot c & $\lnot$i 6--14 \\
-	\lnot e & $\equiv$e 4,15 \\
+	\lnot e & equivalent 4,15 \\
 	d \lor e & $\land$e 2 \\
 	d & disjunctive syllogism 16,17 \\
 	\begin{subproof}
@@ -70,48 +70,265 @@ Hence the possible colors of each box are
 Predicates
 \begin{itemize}
 	\item $P(x)$: $x$ is a program
-	\item $M(x,y)$: $y$ is a method of
-	      $x$
+	\item $M(x)$: $x$ is a method of
 	\item $I(x,y)$: $x$ can invoke
 	      $y$
-	\item $E(x,y)$: $y$ is an entry point of
-	      $x$
+	\item $E(x)$: $x$ is an entry point
 	\item $U(x)$: $x$ is a user
-	\item $S(x,y)$: $y$ is a sink of
-	      $x$
+	\item $S(x)$: $x$ is a sink
 	\item $A(x,y)$: $y$ is accessible from
 	      $x$
+	\item $NV(x)$: $x$ is an invalid program
 \end{itemize}
-
-\subsection{}
+Formula
 \begin{itemize}
 	\item
 	      We define a program as a collection of methods invoking each other.
 	      \begin{equation}
-		      \label{eq:program}
-		      \forall p.(P(p) \equiv \exists m_1,m_2.(M(x,m_1) \land M(x,m_2)
-		      \land I(m_1, m_2)))
+		      \label{lgc:program}
+		      P(p) \equiv \exists m_1,m_2.(M(m_1) \land M(m_2) \land I(m_1, m_2))
 	      \end{equation}
 	\item
 	      An entry point is a method called by the user to run the program. An entry
 	      point cannot be invoked by other methods.
 	      \begin{equation}
-		      \label{eq:entry}
+		      \label{lgc:entry_point}
 		      \forall e.(E(e) \rightarrow (M(e) \land \exists u.(U(u) \land
 		      I(u,e)) \land \forall m.(m \neq e \rightarrow \lnot I(m,e))))
 	      \end{equation}
 	\item
 	      Each program has exactly one entry point.
 	      \begin{equation}
-		      \forall p.(P(p) \rightarrow \exists e.(H(p,e) \land E(e)
-		      \land \forall e'.(H(p,e') \land E(e') \rightarrow e=e'))
+		      \label{lgc:one_entry_point}
+		      P(p) \rightarrow \exists e.(E(e) \land \forall e'.(E(e') \rightarrow e=e')
+	      \end{equation}
+	\item
+	      Define accessible
+	      \begin{equation}
+		      \label{lgc:accessible}
+		      \forall x,y.(A(x,y) \equiv \exists z_1, z_2, \cdots, z_n.(I(x,z_1) \land
+		      I(z_1, z_2) \land \cdots \land I(z_n, y)))
 	      \end{equation}
 	\item
 	      A program should have some sinks that are accessible from the entry point.
 	      \begin{equation}
-		      \forall p.(P(p) \rightarrow \exists s.(S(s) \land H(p,s)
-		      \land \exists e.(E(e) \land H(p,e) \land A(e,s))))
+		      \label{lgc:sink}
+		      P(p) \rightarrow \exists s.(S(s) \land \exists e.(E(e) \land A(e,s))))
+	      \end{equation}
+	\item
+	      A program is invalid, if it does not satisfy any of the above conditions.
+	      \begin{equation}
+		      \label{lgc:valid}
+		      \forall p.(\lnot (\eqref{lgc:program} \land \eqref{lgc:entry_point} \land
+		      \eqref{lgc:one_entry_point} \land \eqref{lgc:accessible} \land
+		      \eqref{lgc:sink}) \rightarrow NV(p))
 	      \end{equation}
 \end{itemize}
+
+\subsection{}
+Predicate
+\begin{itemize}
+	\item $W(x)$: $x$ is an unused method
+\end{itemize}
+Formula
+\begin{equation}
+	\forall w.(W(w) \equiv (M(w) \land
+	\forall e.(E(e) \rightarrow \lnot A(e, w) \land w \neq e))
+\end{equation}
+
+\subsection{}
+To prove that any accessible method from \textbf{only} an unused
+method is unused, we need to prove
+\begin{multline}
+	\forall m.((M(m) \land \exists w.(W(w) \land I(w,m) \\
+	\land \forall m'.((I(m', m) \rightarrow m'=w)))
+	\rightarrow W(m))
+\end{multline}
+To simplify the proof, let $m_0$ denote a method that is
+accessible from \textbf{only} an unused method
+$w_0$. Let $e_0$ denote the program entry
+point. We need to prove
+\begin{equation}
+	I(w_0, m_0) \land \forall m.(I(m, m_0) \rightarrow m = w_0) \rightarrow W(m_0)
+\end{equation}
+Suppose $m_0$ is not unused, then $m_0$
+could be accessed from $e_0$. $m_0$ could
+only be accessed from $w_0$, hence only
+$m_0$ could only be invoked from $w_0$.
+$w_0$ is unused hence not accessible from
+$e_0$ and is not $e_0$. We now use
+contradiction to proof $m_0$ cannot be accessed from
+$e_0$:
+\begin{logicproof}{1}
+	M(m_0) & premise \\
+	\lnot A(e_0, w_0) & premise \\
+	E(e_0) & premise \\
+	I(w_0, m_0) & premise \\
+	\forall m.(I(m, m_0) \rightarrow m = w_0) & premise \\
+	\forall x,y.(A(x,y) \equiv \exists z_1, z_2, \cdots, z_n.(I(x,z_1) \land
+	I(z_1,
+	z_2) \land \cdots \land I(z_n, y)))
+	& premise \\
+	\begin{subproof}
+		A(e_0, m_0) & assumption \\
+		A(e_0, m_0) \equiv
+		\exists z_1, z_2, \cdots, z_n.(I(e_0,z_1) \land I(z_1,
+		z_2) \land \cdots \land I(z_n, m_0))
+		& $\forall$e 6 \\
+		\exists z_1, z_2, \cdots, z_n.(I(e_0,z_1) \land I(z_1,
+		z_2) \land \cdots \land I(z_n, m_0))
+		& equivalent 7,8 \\
+		I(e_0,z_1) \land I(z_1, z_2) \land \cdots \land I(z_n, m_0)
+		& $\exists$e 9 \\
+		I(z_n, m_0) & $\land$e 10 \\
+		I(z_n, m_0) \rightarrow z_n = w_0 & $\forall$e 5 \\
+		z_n = w_0 & MP 11,12 \\
+		I(e_0,z_1) \land I(z_1, z_2) \land \cdots \land
+		I(z_{n-1}, z_n)
+		& $\land$e 10 \\
+		I(e_0,z_1) \land I(z_1, z_2) \land \cdots \land
+		I(z_{n-1}, w_0)
+		& equivalent 13,14 \\
+		\exists z_1, \cdots, z_{n-1}.(I(e_0,z_1) \land I(z_1,
+		z_2) \land \cdots \land
+		I(z_{n-1}, w_0))
+		& $\exists$i 15 \\
+		A(e_0, w_0) \equiv
+		\exists z_1, \cdots, z_{n-1}.(I(e_0,z_1) \land I(z_1,
+		z_2) \land \cdots \land I(z_{n-1}, w_0))
+		& $\forall$e 6 \\
+		A(e_0, w_0) & equivalent 16,17 \\
+		\bot & $\lnot$e 2,18
+	\end{subproof}
+	\lnot A(e_0, m_0) & PBC 7--19
+\end{logicproof}
+Hence any accessible method from \textbf{only} an unused method is
+unused.
+
+\subsection{}
+We need to prove
+\begin{equation}
+	\forall s,p.((S(s) \rightarrow W(s)) \rightarrow NV(p))
+\end{equation}
+Suppose the program entry point is $e_0$
+\begin{logicproof} {2}
+	\forall s.(S(s) \rightarrow W(s)) & premise \\
+	\forall w.(W(w) \equiv \lnot A(e_0, w) \land w \neq e_0) & premise \\
+	\lnot \exists s.(S(s) \land A(e_0, s)) \rightarrow NV(p) & premise \\
+	\begin{subproof}
+		s_0 & \\
+		\begin{subproof}
+			S(s_0) \land A(e_0, s_0) & assumption \\
+			S(s_0) \rightarrow W(s_0) & $\forall$e 1 \\
+			S(s_0) & $\land$e 5 \\
+			W(s_0) & MP 6,7 \\
+			W(s_0) \equiv \lnot A(e_0, s_0) \land s_0 \neq e_0
+			& $\forall$e 3 \\
+			\lnot A(e_0, s_0) \land s_0 \neq e_0 & equivalent 6,7 \\
+			\lnot A(e_0, s_0) & $\land$e 10 \\
+			A(e_0, s_0) & $\land$e 5 \\
+			\bot & $\lnot$e 11,12
+		\end{subproof}
+		\lnot (S(s_0) \land A(e_0, s_0)) & PBC 5--13
+	\end{subproof}
+	\forall s.\lnot (S(s) \land A(e_0, s)) & $\forall$i 4--14 \\
+	\lnot \exists s.(S(s) \land A(e_0, s)) & $\forall \lnot \equiv \lnot \exists$ 15 \\
+	NV(p) & MP 3, 16 \\
+	\forall s.(S(s) \rightarrow W(s)) \rightarrow NV(p) & $\rightarrow$i
+	1,17 \\
+	\forall s,p.((S(s) \rightarrow W(s)) \rightarrow NV(p)) &
+	$\forall$i 18
+\end{logicproof}
+
+\section{}
+\subsection{}
+\begin{logicproof}{2}
+	\forall x.P(x) \rightarrow S & premise \\
+	\begin{subproof}
+		\forall x.P(x) & assumption \\
+		S & MP 1,2 \\
+		\begin{subproof}
+			x_0 & \\
+			P(x_0) & $\forall$e 2 \\
+			P(x_0) \rightarrow S & $\rightarrow$i 3,5
+		\end{subproof}
+		\exists x.(P(x) \rightarrow S) & $\exists x$ i 4--6
+	\end{subproof}
+	\begin{subproof}
+		\lnot (\forall x.P(x)) & assumption \\
+		\exists x.\lnot P(x) & $\lnot \forall \equiv \exists \lnot$ 8 \\
+		\begin{subproof}
+			x_0 & \\
+			\lnot P(x_0) & assumption \\
+			\lnot P(x_0) \lor S & $\lor$i 11 \\
+			P(x_0) \rightarrow S & equivalent 12,13 \\
+			\exists x.(P(x) \rightarrow S) & $\exists x$ i 10--13
+		\end{subproof}
+		\exists x.(P(x) \rightarrow S) & $\exists x$ e 9, 10--14
+	\end{subproof}
+	\exists x.(P(x) \rightarrow S) & PBC 2--15
+\end{logicproof}
+
+\subsection{}
+\begin{logicproof}{2}
+	P(b) & premise \\
+	\forall x \forall y.(P(x) \land P(y) \rightarrow x = y) & premise \\
+	\forall x.(P(x) \land P(b) \rightarrow x = b) & $\forall$e 2 \\
+	\forall x.(P(x) \rightarrow x = b) & $\land$e 1,3 \\
+	\begin{subproof}
+		x_0 & \\
+		\begin{subproof}
+			x_0 = b & assumption \\
+			P(x_0) & equivalent 1,6
+		\end{subproof}
+		x_0=b \rightarrow P(x_0) & $\rightarrow$i 6,7 \\
+		P(x_0) \rightarrow x_0 = b & $\forall$e 4 \\
+		P(x_0) \leftrightarrow x_0 = b & $\land$i 8,9
+	\end{subproof}
+	\forall x.(P(x) \leftrightarrow x = b) & $\forall$i 5--10
+\end{logicproof}
+
+\subsection{}
+\begin{logicproof}{2}
+	\exists x,y.(H(x,y) \lor H(y,x)) & premise \\
+	\lnot \exists x.H(x,x) & premise \\
+	\forall x.\lnot H(x,x) & equivalent 2 \\
+	\begin{subproof}
+		\lnot \exists x,y.\lnot(x=y) & assumption \\
+		\forall x,y.\lnot \lnot(x=y) & equivalent 4 \\
+		\forall x,y.(x=y) & $\lnot \lnot$e 5 \\
+		\begin{subproof}
+			x_0, y_0 & \\
+			H(x_0, y_0) \lor H(y_0, x_0) & assumption \\
+			x_0 = y_0 & $\forall$e 6 \\
+			\lnot H(x_0, x_0) & $\forall$e 3 \\
+			\lnot H(x_0, y_0) & equivalent 9,10 \\
+			\lnot H(y_0, x_0) & equivalent 9,10 \\
+			\lnot H(x_0, y_0) \land \lnot H(y_0, x_0) & $\land$i 11,12 \\
+			\lnot (H(x_0, y_0) \lor H(y_0, x_0)) & DeMorgan 13 \\
+			\bot & $\lnot$e 8,14
+		\end{subproof}
+		\bot & $\exists$e 1, 7--15
+	\end{subproof}
+	\exists x,y.\lnot(x=y) & PBC 4--16
+\end{logicproof}
+
+\subsection{}
+\begin{logicproof}{3}
+	\forall x.P(a,x,x) & premise \\
+	\forall x,y,z.(P(x,y,z) \rightarrow P(f(x),y,f(z))) & premise \\
+	P(a, f(a), f(a)) & $\forall$e 1 \\
+	P(a, f(a), f(a)) \rightarrow P(f(a), f(a), f(f(a)))
+	& $\forall$e 2 \\
+	P(f(a), f(a), f(f(a))) & MP 3.4 \\
+	\begin{subproof}
+		z_0 & \\
+		z_0 = f(a) & assumption \\
+		P(f(a), z_0, f(f(a)) & equivalent 5, 7 \\
+		\exists z.P(f(a), z, f(f(a))) & $\exists$i 6--8
+	\end{subproof}
+	\exists z.(z=f(a)) & premise \\
+	\exists z.P(f(a), z, f(f(a))) & $\exists$e 10, 6--9
+\end{logicproof}
 
 \end{document}
