@@ -13,7 +13,6 @@ move(From, To) :-
 
 same([X1, Y1], [X2, Y2]) :- X1 =:= X2, Y1 =:= Y2.
 
-
 dfs(From, To, Path) :-
 	dfs_impl(From, To, [], Path0),
 	reverse(Path0, Path).
@@ -23,12 +22,12 @@ dfs_impl(From, To, Path, Sol) :-
 	not(member(Next, Path)),
 	dfs_impl(Next, To, [From | Path], Sol).
 
-shortest(From, To, Path, Length) :-
+shortest(From, To, Path) :-
 	findall(Path0, dfs(From, To, Path0), Paths),
 	map_list_to_pairs(length, Paths, Pairs0),
 	keysort(Pairs0, Pairs),
-	[Length-Path | _] = Pairs.
+	[_-Path | _] = Pairs.
 
-solve(Path, Length) :-
+solve(Path) :-
 	start(S), exit(T),
-	shortest(S, T, Path, Length).
+	shortest(S, T, Path).
