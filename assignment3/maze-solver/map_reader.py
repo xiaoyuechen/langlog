@@ -14,12 +14,13 @@ if __name__ == "__main__":
     for predicate in predicate_table.values():
         fact_table[predicate] = []
 
-    dim_x = int(input())
+    dim = int(input())
     for y, line in enumerate(sys.stdin):
-        for x in range(dim_x):
-            char = line[x]
-            predicate = predicate_table[char]
-            fact_table[predicate].append((x, y))
+        for x in range(dim):
+            if x < dim and y < dim:
+                char = line[x]
+                predicate = predicate_table[char]
+                fact_table[predicate].append((x, y))
 
     for predicate, position_list in fact_table.items():
         for x, y in position_list:
